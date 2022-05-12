@@ -1,3 +1,3 @@
 # Record
 
-An in-progress explorer tool for Roblox
+An instance hierarchy view for Roblox
