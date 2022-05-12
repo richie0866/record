@@ -1,0 +1,24 @@
+{
+	"name": "Record Test Place",
+	"tree": {
+		"$className": "DataModel",
+
+		"StarterPlayer": {
+			"$className": "StarterPlayer",
+
+			"StarterPlayerScripts": {
+				"$className": "StarterPlayerScripts",
+
+				"Record": {
+					"$path": "out",
+					"include": {
+						"$path": "include",
+						"node_modules": {
+							"$path": "node_modules/@rbxts"
+						}
+					}
+				}
+			}
+		}
+	}
+}
