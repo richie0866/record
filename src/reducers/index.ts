@@ -1,10 +1,10 @@
 import Rodux from "@rbxts/rodux";
-import counterReducer, { CounterState } from "./counter.reducer";
+import hierarchyReducer, { HierarchyState } from "./hierarchy";
 
 export interface RootState {
-	counter: CounterState;
+	hierarchy: HierarchyState;
 }
 
 export default Rodux.combineReducers<RootState, Rodux.AnyAction>({
-	counter: counterReducer,
+	hierarchy: hierarchyReducer,
 });

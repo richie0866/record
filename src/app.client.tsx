@@ -2,7 +2,7 @@ import Roact from "@rbxts/roact";
 import { Provider } from "@rbxts/roact-rodux-hooked";
 
 import App from "components/App";
-import { IS_LOADED } from "constants/app";
+import { IS_LOADED } from "constants/env";
 import { configureStore } from "configure-store";
 import { getMountTarget } from "utils/get-mount-target";
 import { hasGlobal, setGlobal } from "utils/global-util";
