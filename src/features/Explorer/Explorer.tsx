@@ -16,6 +16,8 @@ function Explorer() {
 		dispatch(appendNode(createNode(game.GetService("Workspace"))));
 	}, []);
 
+	const duplicates: Record<number, number | undefined> = {};
+
 	return (
 		<Root>
 			<scrollingframe
@@ -23,7 +25,10 @@ function Explorer() {
 				Size={new UDim2(0, 500, 0, 500)}
 				Position={new UDim2(0.15, 0, 0.3, 0)}
 			>
-				{arrayToMap(nodeIds, (id, order) => [id, <ExplorerNode id={id} order={order} />])}
+				{arrayToMap(nodeIds, (id, order) => [
+					`${id}-${id in duplicates ? ++duplicates[id]! : (duplicates[id] = 0)}`,
+					<ExplorerNode id={id} order={order} />,
+				])}
 			</scrollingframe>
 		</Root>
 	);

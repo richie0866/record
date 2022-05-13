@@ -1,7 +1,7 @@
 import Roact from "@rbxts/roact";
 import { hooked, useEffect, useState } from "@rbxts/roact-hooked";
 
-import { collapseNodeDeep, expandNode, getNodeChildren, selectNode, selectNodeDepth } from "reducers/hierarchy";
+import { collapseNode, expandNode, getNodeChildren, selectNode, selectNodeDepth } from "reducers/hierarchy";
 import { useRootDispatch, useRootSelector } from "hooks/use-root-store";
 
 interface Props {
@@ -19,9 +19,9 @@ function ExplorerNode({ id, order }: Props) {
 
 	useEffect(() => {
 		if (isExpanded) {
-			dispatch(expandNode(id, getNodeChildren(node)));
+			dispatch(expandNode(id, order, getNodeChildren(node)));
 		} else {
-			dispatch(collapseNodeDeep(id));
+			dispatch(collapseNode(id, order));
 		}
 	}, [isExpanded]);
 

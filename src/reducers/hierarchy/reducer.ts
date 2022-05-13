@@ -1,5 +1,6 @@
 import { HierarchyAction } from "./action";
 import { HierarchyState } from "./model";
+import { getNodeDepth } from "./utils";
 
 const initialState: HierarchyState = {
 	nodesById: {},
@@ -24,10 +25,9 @@ export default function hierarchyReducer(state = initialState, action: Hierarchy
 			const nodesById = table.clone(state.nodesById);
 			const nodeIds = table.clone(state.nodeIds);
 
-			const startIndex = nodeIds.indexOf(action.id);
 			for (const child of action.children) {
 				nodesById[child.id] = child;
-				nodeIds.insert(startIndex + 1, child.id);
+				nodeIds.insert(action.at + 1, child.id);
 			}
 
 			return {
@@ -37,11 +37,26 @@ export default function hierarchyReducer(state = initialState, action: Hierarchy
 		}
 		case "COLLAPSE_NODE": {
 			const nodesById = table.clone(state.nodesById);
-			const nodeIds = state.nodeIds.filter((id) => {
-				if (state.nodesById[id]?.memberOf === action.id) {
-					nodesById[id] = undefined;
+			const parentDepth = getNodeDepth(nodesById[action.id]!, nodesById);
+
+			let ignoreRest = false;
+
+			const nodeIds = state.nodeIds.filter((id, index) => {
+				if (ignoreRest || index < action.at + 1) {
+					return true;
+				}
+
+				const node = nodesById[id];
+
+				if (node?.memberOf === action.id) {
+					// nodesById[id] = undefined;
 					return false;
 				}
+
+				if (node && getNodeDepth(node, nodesById) <= parentDepth) {
+					ignoreRest = true;
+				}
+
 				return true;
 			});
 
