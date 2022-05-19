@@ -22,9 +22,29 @@ export const selectNodeDepth = createSelector([selectNode, selectNodesById], (no
 	return depth;
 });
 
-export const selectNodeChildren = createSelector(
+export const selectNodeAncestorExpanded = createSelector([selectNode, selectNodesById], (node, nodesById) => {
+	if (node === undefined) {
+		return true;
+	}
+
+	let currentId = node.memberOf;
+	while (currentId !== undefined) {
+		if (!nodesById[currentId]?.expanded) {
+			return false;
+		}
+		currentId = nodesById[currentId]?.memberOf;
+	}
+
+	return true;
+});
+
+export const selectNodeChildrenIds = createSelector(
 	[selectNode, selectNodesById, selectNodeIds],
 	(parent, nodesById, nodeIds) => nodeIds.filter((id) => nodesById[id]?.memberOf === parent.id),
 );
 
-export const selectNodeSize = createSelector([selectNodeChildren], (children) => children.size());
+export const selectNodeChildren = createSelector([selectNodeChildrenIds, selectNodesById], (children, nodesById) =>
+	children.mapFiltered((id) => nodesById[id]),
+);
+
+export const selectNodeSize = createSelector([selectNodeChildrenIds], (children) => children.size());

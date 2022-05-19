@@ -1,6 +1,7 @@
 export interface HierarchyNode {
 	id: number;
 	value: defined;
+	expanded: boolean;
 	memberOf?: number;
 }
 

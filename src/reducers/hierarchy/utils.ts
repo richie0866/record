@@ -2,25 +2,33 @@ import { HierarchyNode } from "reducers/hierarchy";
 
 let id = 0;
 
-export function getUniqueId() {
-	id += 1;
-	return id;
-}
-
-export function createNode(value: defined, parent?: number) {
+export function createNode(value: defined, parent?: number): HierarchyNode {
 	return {
-		id: getUniqueId(),
+		id: ++id,
 		value,
 		memberOf: parent,
+		expanded: false,
 	};
 }
 
-export function getNodeChildren(node: HierarchyNode): readonly HierarchyNode[] {
-	let children: defined[] = [];
-
+export function getNodeChildrenValues(node: HierarchyNode): readonly defined[] {
 	if (typeIs(node.value, "Instance")) {
-		children = node.value.GetChildren();
+		return node.value.GetChildren();
 	}
+	return [];
+}
 
-	return children.map((child) => createNode(child, node.id));
+export function getNodeChildren(node: HierarchyNode): readonly HierarchyNode[] {
+	return getNodeChildrenValues(node).map((child) => createNode(child, node.id));
+}
+
+export function countNodeChildren(node: HierarchyNode): number {
+	if (typeIs(node.value, "Instance")) {
+		return node.value.GetChildren().size();
+	}
+	return 0;
+}
+
+export function compareNode(a: HierarchyNode, b: HierarchyNode): boolean {
+	return tostring(a.value).lower() > tostring(b.value).lower();
 }
