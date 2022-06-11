@@ -1,10 +1,10 @@
 import Rodux from "@rbxts/rodux";
-import hierarchyReducer, { HierarchyState } from "./hierarchy";
+import treeReducer, { TreeState } from "./tree";
 
 export interface RootState {
-	hierarchy: HierarchyState;
+	tree: TreeState;
 }
 
 export default Rodux.combineReducers<RootState, Rodux.AnyAction>({
-	hierarchy: hierarchyReducer,
+	tree: treeReducer,
 });

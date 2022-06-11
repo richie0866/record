@@ -4,7 +4,6 @@ import { Provider } from "@rbxts/roact-rodux-hooked";
 import App from "components/App";
 import { IS_LOADED } from "constants/env";
 import { configureStore } from "configure-store";
-import { getMountTarget } from "utils/get-mount-target";
 import { hasGlobal, setGlobal } from "utils/global-util";
 
 if (hasGlobal(IS_LOADED)) {
@@ -15,7 +14,6 @@ Roact.mount(
 	<Provider store={configureStore()}>
 		<App />
 	</Provider>,
-	getMountTarget(),
 );
 
 setGlobal(IS_LOADED, true);

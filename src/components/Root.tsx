@@ -1,17 +1,36 @@
 import Roact from "@rbxts/roact";
-import { RunService } from "@rbxts/services";
+import { DISPLAY_ORDER } from "constants/app";
+import { Players } from "@rbxts/services";
 
-export default function Root(props: Roact.PropsWithChildren) {
-	if (!RunService.IsRunning()) {
-		return (
-			<frame Size={new UDim2(1, 0, 1, 0)} BackgroundTransparency={1}>
-				{props[Roact.Children]}
-			</frame>
-		);
+interface Props extends Roact.PropsWithChildren {
+	displayOrder?: number;
+}
+
+function hasCoreAccess() {
+	return opcall(() => game.GetService("CoreGui").Name).success;
+}
+
+function getTarget() {
+	if (gethui) {
+		return gethui(); // Script engine
 	}
+	if (hasCoreAccess()) {
+		return game.GetService("CoreGui"); // Plugin, Command line
+	}
+	return Players.LocalPlayer.WaitForChild("PlayerGui"); // LocalScript
+}
+
+export default function Root({ displayOrder = 0, [Roact.Children]: children }: Props) {
 	return (
-		<screengui IgnoreGuiInset ResetOnSpawn={false} ZIndexBehavior="Sibling">
-			{props[Roact.Children]}
-		</screengui>
+		<Roact.Portal target={getTarget()}>
+			<screengui
+				IgnoreGuiInset
+				ResetOnSpawn={false}
+				ZIndexBehavior="Sibling"
+				DisplayOrder={DISPLAY_ORDER + displayOrder}
+			>
+				{children}
+			</screengui>
+		</Roact.Portal>
 	);
 }

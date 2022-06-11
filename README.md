@@ -1,3 +1,3 @@
 # Record
 
-An instance hierarchy view for Roblox
+This setup is not performant enough to be used in production.
